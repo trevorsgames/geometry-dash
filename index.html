@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,121 +5,53 @@ html
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trevor's Snake</title>
   <style>
-    * {
-      box-sizing: border-box;
-      user-select: none;
-    }
+    * { box-sizing: border-box; user-select: none; }
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background-color: #385723;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; margin: 0; background: #385723;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     .game-wrapper {
-      background-color: #578A34;
-      padding: 18px;
-      border-radius: 12px;
+      background: #578A34; padding: 18px; border-radius: 12px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     }
     .header {
-      background-color: #4A752C;
-      margin: -18px -18px 18px -18px;
-      padding: 14px 24px;
-      border-radius: 12px 12px 0 0;
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
+      background: #4A752C; margin: -18px -18px 18px -18px; padding: 14px 24px;
+      border-radius: 12px 12px 0 0; display: flex; gap: 28px;
+      color: white; font-size: 24px; font-weight: bold;
     }
-    .stat {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .canvas-container {
-      position: relative;
-      width: 450px;
-      height: 450px;
-    }
-    canvas {
-      display: block;
-      border-radius: 4px;
-    }
+    .canvas-container { position: relative; width: 450px; height: 450px; }
+    canvas { display: block; border-radius: 4px; }
     .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      backdrop-filter: blur(2px);
-      transition: opacity 0.2s ease;
+      position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border-radius: 4px; backdrop-filter: blur(2px); transition: opacity 0.2s;
     }
-    .overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    .overlay.hidden { opacity: 0; pointer-events: none; }
     .card {
-      background: #4CC0F4;
-      padding: 24px 36px;
-      border-radius: 16px;
-      text-align: center;
-      color: white;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      background: #4CC0F4; padding: 24px 36px; border-radius: 16px;
+      text-align: center; color: white; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
       margin-bottom: 16px;
     }
-    .card h2 {
-      margin: 0 0 12px 0;
-      font-size: 28px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    }
-    .card-scores {
-      display: flex;
-      justify-content: center;
-      gap: 28px;
-      font-size: 22px;
-      font-weight: bold;
-    }
+    .card h2 { margin: 0 0 12px 0; font-size: 28px; }
+    .card-scores { display: flex; justify-content: center; gap: 28px; font-size: 22px; font-weight: bold; }
     button {
-      background-color: #1155CC;
-      color: white;
-      border: none;
-      padding: 14px 42px;
-      font-size: 20px;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
+      background: #1155CC; color: white; border: none; padding: 14px 42px;
+      font-size: 20px; font-weight: bold; border-radius: 10px; cursor: pointer;
       box-shadow: 0 4px 0 #0B3B91;
-      transition: transform 0.1s, background-color 0.15s;
     }
-    button:hover {
-      background-color: #1A66E8;
-    }
-    button:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #0B3B91;
-    }
+    button:hover { background: #1A66E8; }
+    button:active { transform: translateY(3px); box-shadow: 0 1px 0 #0B3B91; }
   </style>
 </head>
 <body>
-
   <div class="game-wrapper">
     <div class="header">
-      <div class="stat">🍎 <span id="score">0</span></div>
-      <div class="stat">🏆 <span id="high-score">0</span></div>
+      <div>🍎 <span id="score">0</span></div>
+      <div>🏆 <span id="high-score">0</span></div>
     </div>
-
     <div class="canvas-container">
       <canvas id="game" width="450" height="450"></canvas>
-
       <div id="overlay" class="overlay">
         <div class="card">
           <h2 id="overlay-title">Trevor's Snake</h2>
@@ -149,31 +80,19 @@ html
     const gridSize = canvas.width / tileCount;
     const stepInterval = 115;
 
-    let highScore = Number(localStorage.getItem("trevorSnakeHigh")) || 0;
+    let highScore = 0;
+    try { highScore = Number(localStorage.getItem("trevorSnakeHigh")) || 0; } catch (e) {}
     highScoreEl.textContent = highScore;
 
-    let snake = [];
-    let prevSnake = [];
-    let food = { x: 11, y: 7 };
-    let dx = 0;
-    let dy = 0;
-    let inputQueue = [];
-    let score = 0;
-    let lastStepTime = 0;
+    let snake = [], prevSnake = [], food = { x: 11, y: 7 };
+    let dx = 0, dy = 0, inputQueue = [], score = 0, lastStepTime = 0;
     let gameState = "MENU";
 
     function initBoard() {
-      snake = [
-        { x: 4, y: 7 },
-        { x: 3, y: 7 },
-        { x: 2, y: 7 }
-      ];
+      snake = [{ x: 4, y: 7 }, { x: 3, y: 7 }, { x: 2, y: 7 }];
       prevSnake = snake.map(p => ({ ...p }));
       food = { x: 11, y: 7 };
-      dx = 0;
-      dy = 0;
-      inputQueue = [];
-      score = 0;
+      dx = 0; dy = 0; inputQueue = []; score = 0;
       scoreEl.textContent = score;
     }
 
@@ -187,7 +106,7 @@ html
       gameState = "GAMEOVER";
       if (score > highScore) {
         highScore = score;
-        localStorage.setItem("trevorSnakeHigh", highScore);
+        try { localStorage.setItem("trevorSnakeHigh", highScore); } catch (e) {}
         highScoreEl.textContent = highScore;
       }
       overlayTitle.textContent = "Game Over!";
@@ -200,18 +119,11 @@ html
     function gameLoop(timestamp) {
       if (!lastStepTime) lastStepTime = timestamp;
       const elapsed = timestamp - lastStepTime;
-
       if (elapsed >= stepInterval) {
-        if (gameState === "PLAYING") {
-          update();
-        }
+        if (gameState === "PLAYING") update();
         lastStepTime = timestamp - (elapsed % stepInterval);
       }
-
-      const progress = gameState === "PLAYING"
-        ? Math.min((timestamp - lastStepTime) / stepInterval, 1)
-        : 1;
-
+      const progress = gameState === "PLAYING" ? Math.min((timestamp - lastStepTime) / stepInterval, 1) : 1;
       draw(progress);
       requestAnimationFrame(gameLoop);
     }
@@ -222,15 +134,11 @@ html
         dx = nextDir.x;
         dy = nextDir.y;
       }
-
       prevSnake = snake.map(part => ({ ...part }));
-
-      const currentHead = snake.at(0);
-      const head = { x: currentHead.x + dx, y: currentHead.y + dy };
+      const head = { x: snake.at(0).x + dx, y: snake.at(0).y + dy };
 
       if (
-        head.x < 0 || head.x >= tileCount ||
-        head.y < 0 || head.y >= tileCount ||
+        head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount ||
         snake.slice(0, -1).some(part => part.x === head.x && part.y === head.y)
       ) {
         triggerGameOver();
@@ -238,7 +146,6 @@ html
       }
 
       snake.unshift(head);
-
       if (head.x === food.x && head.y === food.y) {
         score += 1;
         scoreEl.textContent = score;
@@ -263,137 +170,88 @@ html
 
       const appleX = food.x * gridSize + gridSize / 2;
       const appleY = food.y * gridSize + gridSize / 2 + 1;
-      const appleRadius = gridSize * 0.36;
+      const r = gridSize * 0.36;
 
       ctx.fillStyle = "#E7471D";
-      ctx.beginPath();
-      ctx.arc(appleX, appleY, appleRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-      ctx.beginPath();
-      ctx.arc(appleX - appleRadius * 0.3, appleY - appleRadius * 0.3, appleRadius * 0.25, 0, Math.PI * 2);
-      ctx.fill();
-
+      ctx.beginPath(); ctx.arc(appleX, appleY, r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.25)";
+      ctx.beginPath(); ctx.arc(appleX - r * 0.3, appleY - r * 0.3, r * 0.25, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#4A752C";
+      ctx.beginPath(); ctx.ellipse(appleX + 3, appleY - r - 1, 5, 2.5, -Math.PI / 5, 0, Math.PI * 2); ctx.fill();
+
+      const headCurr = snake.at(0);
+      const headPrev = prevSnake.at(0) || headCurr;
+      const headX = (headPrev.x + (headCurr.x - headPrev.x) * progress) * gridSize + gridSize / 2;
+      const headY = (headPrev.y + (headCurr.y - headPrev.y) * progress) * gridSize + gridSize / 2;
+
+      const tailCurr = snake.at(-1);
+      const tailPrev = prevSnake.at(-1) || tailCurr;
+      const tailX = (tailPrev.x + (tailCurr.x - tailPrev.x) * progress) * gridSize + gridSize / 2;
+      const tailY = (tailPrev.y + (tailCurr.y - tailPrev.y) * progress) * gridSize + gridSize / 2;
+
+      ctx.strokeStyle = "#4673E8";
+      ctx.lineWidth = gridSize * 0.74;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
       ctx.beginPath();
-      ctx.ellipse(appleX + 3, appleY - appleRadius - 1, 5, 2.5, -Math.PI / 5, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (snake.length > 0) {
-        const headCurr = snake.at(0);
-        const headPrev = prevSnake.at(0) || headCurr;
-        const headX = (headPrev.x + (headCurr.x - headPrev.x) * progress) * gridSize + gridSize / 2;
-        const headY = (headPrev.y + (headCurr.y - headPrev.y) * progress) * gridSize + gridSize / 2;
-
-        const tailCurr = snake.at(-1);
-        const tailPrev = prevSnake.at(-1) || tailCurr;
-        const tailX = (tailPrev.x + (tailCurr.x - tailPrev.x) * progress) * gridSize + gridSize / 2;
-        const tailY = (tailPrev.y + (tailCurr.y - tailPrev.y) * progress) * gridSize + gridSize / 2;
-
-        ctx.strokeStyle = "#4673E8";
-        ctx.lineWidth = gridSize * 0.74;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-
-        ctx.beginPath();
-        ctx.moveTo(headX, headY);
-
-        for (let i = 0; i < prevSnake.length - 1; i++) {
-          const segment = prevSnake.at(i);
-          ctx.lineTo(
-            segment.x * gridSize + gridSize / 2,
-            segment.y * gridSize + gridSize / 2
-          );
-        }
-
-        ctx.lineTo(tailX, tailY);
-        ctx.stroke();
-
-        drawEyes(headX, headY, appleX, appleY);
+      ctx.moveTo(headX, headY);
+      for (let i = 0; i < prevSnake.length - 1; i++) {
+        ctx.lineTo(prevSnake.at(i).x * gridSize + gridSize / 2, prevSnake.at(i).y * gridSize + gridSize / 2);
       }
-    }
+      ctx.lineTo(tailX, tailY);
+      ctx.stroke();
 
-    function drawEyes(headX, headY, appleX, appleY) {
       const dirX = dx === 0 && dy === 0 ? 1 : dx;
       const dirY = dy;
-
-      const perpX = -dirY;
-      const perpY = dirX;
-
-      const forwardOffset = gridSize * 0.14;
-      const sideOffset = gridSize * 0.19;
-      const eyeRadius = gridSize * 0.14;
-      const pupilRadius = eyeRadius * 0.55;
-
-      const angleToApple = Math.atan2(appleY - headY, appleX - headX);
-
+      const angle = Math.atan2(appleY - headY, appleX - headX);
       [-1, 1].forEach(side => {
-        const ex = headX + dirX * forwardOffset + perpX * sideOffset * side;
-        const ey = headY + dirY * forwardOffset + perpY * sideOffset * side;
-
+        const ex = headX + dirX * gridSize * 0.14 + (-dirY) * gridSize * 0.19 * side;
+        const ey = headY + dirY * gridSize * 0.14 + dirX * gridSize * 0.19 * side;
         ctx.fillStyle = "white";
-        ctx.beginPath();
-        ctx.arc(ex, ey, eyeRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        const px = ex + Math.cos(angleToApple) * (eyeRadius - pupilRadius) * 0.7;
-        const py = ey + Math.sin(angleToApple) * (eyeRadius - pupilRadius) * 0.7;
-
+        ctx.beginPath(); ctx.arc(ex, ey, gridSize * 0.14, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = "#111";
         ctx.beginPath();
-        ctx.arc(px, py, pupilRadius, 0, Math.PI * 2);
+        ctx.arc(ex + Math.cos(angle) * gridSize * 0.04, ey + Math.sin(angle) * gridSize * 0.04, gridSize * 0.075, 0, Math.PI * 2);
         ctx.fill();
       });
     }
 
     function spawnFood() {
       do {
-        food = {
-          x: Math.floor(Math.random() * tileCount),
-          y: Math.floor(Math.random() * tileCount)
-        };
+        food = { x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount) };
       } while (snake.some(part => part.x === food.x && part.y === food.y));
     }
 
-Use code with caution.
-function queueDirection(newDx, newDy) {
-if (gameState === "MENU" || gameState === "GAMEOVER") return;
-if (gameState === "READY") {
-if (newDx === -1 && newDy === 0) return;
-gameState = "PLAYING";
-dx = newDx;
-dy = newDy;
-lastStepTime = performance.now();
-return;
-}
-const lastDir = inputQueue.length > 0
-? inputQueue.at(-1)
-: { x: dx, y: dy };
-if (newDx !== 0 && lastDir.x === 0 && inputQueue.length < 2) {
-inputQueue.push({ x: newDx, y: 0 });
-} else if (newDy !== 0 && lastDir.y === 0 && inputQueue.length < 2) {
-inputQueue.push({ x: 0, y: newDy });
-}
-}
-document.addEventListener("keydown", e => {
-const key = e.key.toLowerCase();
-if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(key)) {
-e.preventDefault();
-}
-if ((key === " " || key === "enter") && (gameState === "MENU" || gameState === "GAMEOVER")) {
-startGame();
-return;
-}
-if (key === "arrowup" || key === "w") queueDirection(0, -1);
-else if (key === "arrowdown" || key === "s") queueDirection(0, 1);
-else if (key === "arrowleft" || key === "a") queueDirection(-1, 0);
-else if (key === "arrowright" || key === "d") queueDirection(1, 0);
-});
-playBtn.addEventListener("click", startGame);
-initBoard();
-requestAnimationFrame(gameLoop);
-  </script>
+    function queueDirection(newDx, newDy) {
+      if (gameState === "MENU" || gameState === "GAMEOVER") return;
+      if (gameState === "READY") {
+        if (newDx === -1 && newDy === 0) return;
+        gameState = "PLAYING";
+        dx = newDx; dy = newDy;
+        lastStepTime = performance.now();
+        return;
+      }
+      const lastDir = inputQueue.length > 0 ? inputQueue.at(-1) : { x: dx, y: dy };
+      if (newDx !== 0 && lastDir.x === 0 && inputQueue.length < 2) inputQueue.push({ x: newDx, y: 0 });
+      else if (newDy !== 0 && lastDir.y === 0 && inputQueue.length < 2) inputQueue.push({ x: 0, y: newDy });
+    }
 
+    document.addEventListener("keydown", e => {
+      const key = e.key.toLowerCase();
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(key)) e.preventDefault();
+      if ((key === " " || key === "enter") && (gameState === "MENU" || gameState === "GAMEOVER")) {
+        startGame();
+        return;
+      }
+      if (key === "arrowup" || key === "w") queueDirection(0, -1);
+      else if (key === "arrowdown" || key === "s") queueDirection(0, 1);
+      else if (key === "arrowleft" || key === "a") queueDirection(-1, 0);
+      else if (key === "arrowright" || key === "d") queueDirection(1, 0);
+    });
+
+    playBtn.addEventListener("click", startGame);
+    initBoard();
+    requestAnimationFrame(gameLoop);
+  </script>
 </body>
 </html>
