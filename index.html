@@ -258,7 +258,6 @@
     function spawnFood() {
       do {
         food = { x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount) };
-Use code with caution.
 } while (snake.some(part => part.x === food.x && part.y === food.y));
 }
 function queueDirection(newDx, newDy) {
