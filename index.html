@@ -176,7 +176,7 @@
       }
     }
 
-    function drawBackground() {
+        function drawBackground() {
       const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height - groundHeight);
       skyGrad.addColorStop(0, "#4ec0ca");
       skyGrad.addColorStop(1, "#bdeef2");
@@ -197,12 +197,13 @@
       }
 
       ctx.fillStyle = "#8fd3d8";
-      const buildings =;
+      const buildings = new Array(40, 70, 50, 90, 60, 80, 45, 75, 55, 65);
       const bWidth = canvas.width / buildings.length;
       buildings.forEach((h, i) => {
         ctx.fillRect(i * bWidth, canvas.height - groundHeight - h, bWidth + 1, h);
       });
     }
+
 
     function drawGround() {
       const y = canvas.height - groundHeight;
